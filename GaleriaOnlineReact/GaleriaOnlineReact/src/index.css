@@ -1,0 +1,11 @@
+*{
+
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body{
+  font-family: JetBrains Mono, monospace;
+  background-color: #c7d9e5;
+  color: #333;
+}
