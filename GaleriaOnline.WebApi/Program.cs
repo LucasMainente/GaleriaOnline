@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IImagemRepository, IImagemRepository>();
+builder.Services.AddScoped<IImagemRepository, ImagemRepository>();
 
 builder.Services.AddDbContext<GaleriaOnlineDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -31,12 +31,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
-app.UseStaticFiles();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

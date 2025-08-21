@@ -39,6 +39,7 @@ namespace GaleriaOnline.WebApi.Controllers
             return Ok(imagem);
         }
 
+
         [HttpPost("upload")]
         public async Task<IActionResult> UploadImagen([FromForm] ImagemDto dto)
         {
@@ -124,6 +125,7 @@ namespace GaleriaOnline.WebApi.Controllers
                     await imagemAtualizada.Arquivo.CopyToAsync(stream);
                 }
             }
+            return Ok(imagem);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletarImagem(int id)

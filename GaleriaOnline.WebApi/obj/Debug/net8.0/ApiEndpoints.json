@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "GaleriaOnline.WebApi.Controllers.ImagemController",
-    "Method": "GetTodasAsImagems",
-    "RelativePath": "api/Imagem",
+    "ContainingType": "GaleriaOnline.WebApi.Controllers.ImagenController",
+    "Method": "GetTodasAsImagens",
+    "RelativePath": "api/Imagen",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -10,9 +10,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GaleriaOnline.WebApi.Controllers.ImagemController",
-    "Method": "GetImagePorID",
-    "RelativePath": "api/Imagem/{id}",
+    "ContainingType": "GaleriaOnline.WebApi.Controllers.ImagenController",
+    "Method": "GetImagemPorId",
+    "RelativePath": "api/Imagen/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -26,9 +26,51 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "GaleriaOnline.WebApi.Controllers.ImagemController",
-    "Method": "UploadImage",
-    "RelativePath": "api/Imagem/upload",
+    "ContainingType": "GaleriaOnline.WebApi.Controllers.ImagenController",
+    "Method": "AtualizarImagem",
+    "RelativePath": "api/Imagen/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "Arquivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Nome",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GaleriaOnline.WebApi.Controllers.ImagenController",
+    "Method": "DeletarImagem",
+    "RelativePath": "api/Imagen/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GaleriaOnline.WebApi.Controllers.ImagenController",
+    "Method": "UploadImagen",
+    "RelativePath": "api/Imagen/upload",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

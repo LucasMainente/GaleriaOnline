@@ -1,129 +1,55 @@
-﻿using GaleriaOnline.WebApi.DTO;
+﻿using GaleriaOnline.WebApi.DbContextImagem;
 using GaleriaOnline.WebApi.Interfaces;
 using GaleriaOnline.WebApi.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace GaleriaOnline.WebApi.Controllers
+namespace GaleriaOnline.WebApi.Repositories
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ImagemController : ControllerBase
+    public class ImagemRepository : IImagemRepository
+
     {
-        private readonly IImagemRepository _repository;
-        private readonly IWebHostEnvironment _env;
+        private readonly GaleriaOnlineDBContext _context;
 
-        public ImagemController(IImagemRepository repository, IWebHostEnvironment env)
+        public ImagemRepository(GaleriaOnlineDBContext context)
         {
-            _repository = repository;
-            _env = env;
+            _context = context;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetImagemPorId(int id)
+        //public async Task<Imagem> CreateAsync(Imagem imagem)
+
+        public async Task<bool> DeleteAsync(int id)
         {
-            var imagem = await _repository.GetByIdAsync(id);
+            var imagem = await _context.Imagens.FindAsync(id);
             if (imagem == null)
             {
-                return NotFound();
+                return false;
             }
-
-            return Ok(imagem);
+            _context.Imagens.Remove(imagem);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTodasAsImagens()
+        public async Task<IEnumerable<Imagen>> GetAllAsync()
         {
-            var imagem = await _repository.GetAllAsync();
-            return Ok(imagem);
+            return await _context.Imagens.ToListAsync();
         }
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadImagem([FromForm] ImagemDto dto)
+        public async Task<Imagen> GetByIdAsync(int id)
         {
-            if (dto.Arquivo == null || dto.Arquivo.Length == 0 || String.IsNullOrWhiteSpace(dto.Nome))
-            {
-                return BadRequest("Deve ser enviado um Nome e uma Imagem.");
-            }
-
-            var extensao = Path.GetExtension(dto.Arquivo.FileName);
-            var nomeArquivo = $"{Guid.NewGuid()}{extensao}";
-
-            var pastaRelativa = "wwwroot/imagens";
-            var caminhoPasta = Path.Combine(Directory.GetCurrentDirectory(), pastaRelativa);
-
-            if (!Directory.Exists(caminhoPasta))
-            {
-                Directory.CreateDirectory(caminhoPasta);
-            }
-
-            var caminhoCompleto = Path.Combine(caminhoPasta, nomeArquivo);
-
-            using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
-            {
-                await dto.Arquivo.CopyToAsync(stream);
-            }
-
-            var imagem = new Imagen
-            {
-                Nome = dto.Nome,
-                Caminho = Path.Combine(pastaRelativa, nomeArquivo).Replace("\\", "/")
-            };
-
-            await _repository.CreateAsync(imagem);
-
-            Console.WriteLine(imagem.ToString());
-            Console.WriteLine("banana");
-
-            return CreatedAtAction(nameof(GetImagemPorId), new { id = imagem.Id }, imagem);
+            return await _context.Imagens.FindAsync(id);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> AtualizarImagem(int id, PutImagemDTO imagemAtualizada)
+        public async Task<bool> UpdateAsync(Imagen imagem)
         {
-            var imagem = await _repository.GetByIdAsync(id);
-            if (imagem == null)
-            {
-                return NotFound("Imagem não encontrada");
-            }
+            _context.Imagens.Update(imagem);
+            return await _context.SaveChangesAsync() > 0;
+        }
 
-            if (imagemAtualizada.Arquivo == null && string.IsNullOrWhiteSpace(imagemAtualizada.Nome))
-            {
-                return BadRequest("Pelo menos um dos campos tem que ser preenchido.");
-            }
-
-            if (!string.IsNullOrWhiteSpace(imagemAtualizada.Nome))
-            {
-                imagem.Nome = imagemAtualizada.Nome;
-            }
-
-            var caminhoAntigo = Path.Combine(Directory.GetCurrentDirectory(), imagem.Caminho.Replace("/", Path.DirectorySeparatorChar.ToString()));
-
-            if (imagemAtualizada.Arquivo != null && imagemAtualizada.Arquivo.Length > 0)
-            {
-                if (System.IO.File.Exists(caminhoAntigo))
-                {
-                    System.IO.File.Delete(caminhoAntigo);
-                }
-
-                var extensao = Path.GetExtension(imagemAtualizada.Arquivo.FileName);
-                var nomeArquivo = $"{Guid.NewGuid()}{extensao}";
-
-                var pastaRelativa = "wwwroot/imagens";
-                var caminhoPasta = Path.Combine(Directory.GetCurrentDirectory(), pastaRelativa);
-
-                if (!Directory.Exists(caminhoPasta))
-                {
-                    Directory.CreateDirectory(caminhoPasta);
-                }
-                var caminhoCompleto = Path.Combine(caminhoPasta, nomeArquivo);
-
-                using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
-                {
-                    await imagemAtualizada.Arquivo.CopyToAsync(stream);
-                }
-            }
+        public async Task<Imagen> CreateAsync(Imagen imagem)
+        {
+            _context.Imagens.Add(imagem);
+            await _context.SaveChangesAsync();
+            return imagem;
         }
     }
 }

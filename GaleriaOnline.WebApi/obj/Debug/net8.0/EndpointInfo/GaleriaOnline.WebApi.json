@@ -5,10 +5,79 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Imagem/{id}": {
+    "/api/Imagen/{id}": {
       "get": {
         "tags": [
-          "Imagem"
+          "Imagen"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Imagen"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Nome",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Arquivo": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Arquivo": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Imagen"
         ],
         "parameters": [
           {
@@ -28,10 +97,10 @@
         }
       }
     },
-    "/api/Imagem": {
+    "/api/Imagen": {
       "get": {
         "tags": [
-          "Imagem"
+          "Imagen"
         ],
         "responses": {
           "200": {
@@ -40,10 +109,10 @@
         }
       }
     },
-    "/api/Imagem/upload": {
+    "/api/Imagen/upload": {
       "post": {
         "tags": [
-          "Imagem"
+          "Imagen"
         ],
         "requestBody": {
           "content": {
