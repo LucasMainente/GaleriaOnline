@@ -30,11 +30,13 @@ export const Galeria = () => {
                 formData.append("Arquivo", imagem);
 
                 await api.post("/Imagen/upload", formData, {
+                    
                     headers: {
                         "Content-Type": "multipart/form-data"
                     }
                     
-                },listarCards());
+                });
+                listarCards();
 
             } catch (error) {
                 alert("Erro ao cadastrar.");
@@ -47,11 +49,31 @@ export const Galeria = () => {
     }
 
     async function editarCard(id) {
-        alert("Editou");
+        try {
+            const novoNome = prompt("Digite o novo nome:", nomeImagem);
+
+            const novoArquivo = document.createElement('input');
+            novoArquivo.type = 'file';
+            novoArquivo.accept = 'image/*';
+
+            alert("Editado");
+        } catch (error) {
+            alert("Erro ao editar.");
+            console.error(error);
+        }
     }
 
     async function excluirCard(id) {
-        alert("Excluiu")
+        try {
+            await api.delete(`/Imagen/${id}`);
+                alert("Excluído com sucesso.");
+                listarCards();
+
+        } catch (error) {
+            alert("Erro ao excluir.");
+            console.log(error);
+            
+        }
 
 
         }
