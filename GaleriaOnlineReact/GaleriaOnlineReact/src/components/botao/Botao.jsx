@@ -1,7 +1,10 @@
-import './Botao.css';
+import "./Botao.css"
 
 export const Botao = ({nomeBotao}) => {
-  return (
-    <button type="submit" onClick="" className="botao">{nomeBotao}</button>
-  );
+    return(
+        <button className="botao" onClick="" 
+        type="submit">
+            {nomeBotao}
+        </button>
+    )
 }
